@@ -1,48 +1,47 @@
-﻿//Задайте две матрицы. Напишите программу, которая будет 
-//находить произведение двух матриц.
-//Например, даны 2 матрицы:
-//2 4 | 3 4
-//3 2 | 3 3
-//Результирующая матрица будет:
-//18 20
-//15 18
+﻿// Задайте прямоугольный двумерный массив. Напишите программу, которая будет находить строку с 
+//наименьшей суммой элементов.
+//Например, задан массив:
+//1 4 7 2
+//5 9 2 3
+//8 4 2 4
+//5 2 6 7
 
 using System;
 using static System.Console;
 
 Clear();
 
-int[,] firstMatr = new int[2,2];
-CreateArray(firstMatr);
-WriteLine("Первая матрица: ");
-WriteArray(firstMatr);
 
-int[,] secondMatr = new int[2,2];
-CreateArray(secondMatr);
-WriteLine("Вторая матрица: ");
-WriteArray(secondMatr);
 
-int[,] resultMatr = new int[2,2];
+int[,] array = new int[4,4];
+CreateArray(array);
+WriteArray(array);
 
-MultiplyMatr(firstMatr, secondMatr, resultMatr);
-WriteLine("Произведение первой и второй матриц: ");
-WriteArray(resultMatr);
-
-void MultiplyMatr(int[,] firstMatr, int[,] secondMatr, int[,] resultMatr)
+int minSumLine = 0;
+int sumLine = SumLineElements(array, 0);
+for (int i = 1; i < array.GetLength(0); i++)
 {
-  for    (int i= 0; i < firstMatr.GetLength(0); i++) 
+  int tempSumLine = SumLineElements(array, i);
+  if (sumLine > tempSumLine)
   {
-    for    (int j=0; j < secondMatr.GetLength(1); j++)
-    {
-      int sum = 0;
-      for (int k = 0; k < firstMatr.GetLength(1); k++)
-      {
-        sum += firstMatr[i,k] * secondMatr[k,j];
-      }
-      resultMatr[i,j] = sum;
-    }
+    sumLine = tempSumLine;
+    minSumLine = i;
   }
 }
+
+Console.WriteLine($"\n{minSumLine+1} - строкa с наименьшей суммой ({sumLine}) элементов ");
+
+
+int SumLineElements(int[,] array, int i)
+{
+  int sumLine = array[i,0];
+  for (int j = 1; j < array.GetLength(1); j++)
+  {
+    sumLine += array[i,j];
+  }
+  return sumLine;
+}
+
 
 void CreateArray(int[,] array)
 {
@@ -61,8 +60,8 @@ void WriteArray (int[,] array)
   {
     for (int j = 0; j < array.GetLength(1); j++)
     {
-      Write(array[i,j] + " ");
+      Console.Write(array[i,j] + " ");
     }
-    WriteLine();
+    Console.WriteLine();
   }
 }
