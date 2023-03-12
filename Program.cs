@@ -1,58 +1,47 @@
-﻿// ...Сформируйте трёхмерный массив из неповторяющихся двузначных чисел. 
-//Напишите программу, которая будет построчно выводить массив, добавляя индексы каждого элемента.
-//Массив размером 2 x 2 x 2
-//66(0,0,0) 25(0,1,0)
-//34(1,0,0) 41(1,1,0)
-//27(0,0,1) 90(0,1,1)
-//26(1,0,1) 55(1,1,1)
+﻿// Напишите программу, которая заполнит спирально массив 4 на 4.
+//Например, на выходе получается вот такой массив:
+//01 02 03 04
+//12 13 14 05
+//11 16 15 06
+//10 09 08 07
 
 using System;
 using static System.Console;
 
+int[,] table = new int[4, 4];
+FillArraySpiral(table, 4);
+PrintArray(table);
 
 
-int[,,] array3D = new int[2, 2, 2];
-CreateArray(array3D);
-WriteArray(array3D);
-
-
-void WriteArray(int[,,] array3D)
+void FillArraySpiral(int[,] array, int n)
 {
-    for (int i = 0; i < array3D.GetLength(0); i++)
+    int i = 0, j = 0;
+    int value = 1;
+    for (int m = 0; m < n * n; m++)
     {
-        for (int j = 0; j < array3D.GetLength(1); j++)
-        {
-            Write($"X({i}) Y({j}) ");
-            for (int k = 0; k < array3D.GetLength(2); k++)
-            {
-                Write($"Z({k}) = {array3D[i,j,k]}; ");
-            }
-            WriteLine();
-        }
-        WriteLine();
+        int k = 0;
+        do { array[i, j++] = value++; } while (++k < n - 1);
+        for (k = 0; k < n - 1; k++) array[i++, j] = value++;
+        for (k = 0; k < n - 1; k++) array[i, j--] = value++;
+        for (k = 0; k < n - 1; k++) array[i--, j] = value++;
+        ++i; ++j;
+        n = n < 2 ? 0 : n - 2;
     }
 }
 
-void CreateArray(int[,,] array3D)
+void PrintArray(int[,] array)
 {
-    int[] temp = new int[array3D.GetLength(0) * array3D.GetLength(1) * array3D.GetLength(2)];
-    int num;
-    for (int i = 0; i < temp.GetLength(0); i++)
+    for (int i = 0; i < array.GetLength(0); i++)
     {
-        temp[i] = new Random().Next(10,100);
-        num = temp[i];
-        if (i >= 1)
+        for (int j = 0; j < array.GetLength(1); j++)
         {
-            for (int j = 0; j < i; j++)
+            if (array[i, j] < 10)
             {
-                while (temp[i] == temp[j])
-                {
-                    temp[i] = new Random().Next(10,100);
-                    j = 0;
-                    num = temp[i];
-                }
-                    num = temp[i];
+                Write("0" + array[i, j]);
+                Write(" ");
             }
+            else Write(array[i, j] + " ");
         }
+        WriteLine();
     }
 }
