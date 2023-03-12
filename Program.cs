@@ -1,84 +1,68 @@
-﻿// Задайте двумерный массив. Напишите программу, которая упорядочит по убыванию элементы 
-//каждой строки двумерного массива.
-//Например, задан массив:
-//1 4 7 2
-//5 9 2 3
-//8 4 2 4
-//В итоге получается вот такой массив:
-//7 4 2 1
-//9 5 3 2
-//8 4 4 2
+﻿//Задайте две матрицы. Напишите программу, которая будет 
+//находить произведение двух матриц.
+//Например, даны 2 матрицы:
+//2 4 | 3 4
+//3 2 | 3 3
+//Результирующая матрица будет:
+//18 20
+//15 18
 
 using System;
 using static System.Console;
 
 Clear();
 
-int rowCount = 3;
-int colCount = 4;
-int[,] arr = GenerateArray(rowCount, colCount);
-WriteLine("Исходный массив: ");
-PrintArray(arr);
-WriteLine("Сортировка по строкам: ");
-int[] row = new int[colCount];
+int[,] firstMatr = new int[2,2];
+CreateArray(firstMatr);
+WriteLine("Первая матрица: ");
+WriteArray(firstMatr);
 
-for (int i = 0; i < rowCount; i++)
+int[,] secondMatr = new int[2,2];
+CreateArray(secondMatr);
+WriteLine("Вторая матрица: ");
+WriteArray(secondMatr);
+
+int[,] resultMatr = new int[2,2];
+
+MultiplyMatr(firstMatr, secondMatr, resultMatr);
+WriteLine("Произведение первой и второй матриц: ");
+WriteArray(resultMatr);
+
+void MultiplyMatr(int[,] firstMatr, int[,] secondMatr, int[,] resultMatr)
 {
-    for (int j = 0; j < colCount; j++)
-    row[j] = arr[i, j];
-    BubbleSort(row);
-    Insert(true, i, row, arr);
+  for    (int i= 0; i < firstMatr.GetLength(0); i++) 
+  {
+    for    (int j=0; j < secondMatr.GetLength(1); j++)
+    {
+      int sum = 0;
+      for (int k = 0; k < firstMatr.GetLength(1); k++)
+      {
+        sum += firstMatr[i,k] * secondMatr[k,j];
+      }
+      resultMatr[i,j] = sum;
+    }
+  }
 }
 
-PrintArray(arr);
-
-void Insert(bool isRow, int dim, int[] source, int[,] dest)
+void CreateArray(int[,] array)
 {
-    for (int k = 0; k < source.Length; k++)
+  for (int i = 0; i < array.GetLength(0); i++)
+  {
+    for (int j = 0; j < array.GetLength(1); j++)
     {
-        if (isRow)
-        dest[dim, k] = source[k];
-        else
-         dest[k, dim] = source[k];
+      array[i, j] = new Random().Next(0,10);
     }
+  }
 }
 
-int[,] GenerateArray(int t, int i)
+void WriteArray (int[,] array)
 {
-    int[,] table = new int[t, i];
-    Random random = new Random();
-    for (int a = 0; a < t; a++)
+  for (int i = 0; i < array.GetLength(0); i++)
+  {
+    for (int j = 0; j < array.GetLength(1); j++)
     {
-        for (int b = 0; b < i; b++)
-        {
-            table[a, b] = random.Next(0, 9);
-        }
+      Write(array[i,j] + " ");
     }
-    return table;
-}
-
-void PrintArray(int[,] array)
-{
-    for (int a = 0; a < array.GetLength(0); a++)
-    {
-        for (int b = 0; b < array.GetLength(1); b++)
-        {
-            Write(array[a, b] + " ");
-        }
-        WriteLine();
-    }
-}
-
-void BubbleSort(int[] inArray)
-{
-    for (int i = 0; i < inArray.Length; i++)
-    for (int j = 0; j < inArray.Length - i - 1; j++)
-    {
-     if (inArray[j] > inArray[j + 1])
-     {
-        int temp = inArray[j];
-        inArray[j] = inArray[j + 1];
-        inArray[j + 1] = temp;
-     }
-    }
+    WriteLine();
+  }
 }
